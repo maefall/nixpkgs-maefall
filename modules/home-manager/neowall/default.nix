@@ -2,7 +2,7 @@
 
 let
   cfg = config.programs.neowall;
-  neowallPackage = pkgs.neowall;
+  neowallPackage = pkgs.callPackage ../../../packages/neowall/default.nix { };
   neowallCli = lib.getExe neowallPackage;
 
   renderedConfig =
