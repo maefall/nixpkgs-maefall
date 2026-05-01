@@ -92,21 +92,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
 
 
- // Logo overlay — centered, scaled to ~20% of height
-    float logoScale = 0.20 * iResolution.y / iResolution.x;
-    vec2 logoUV = (uv - vec2(0.5)) / vec2(logoScale, 0.20) + 0.5;
-    if (logoUV.x > 0.0 && logoUV.x < 1.0 && logoUV.y > 0.0 && logoUV.y < 1.0) {
-        vec4 logo = texture(iChannel0, logoUV);
-        // logo is white-on-black in the SVG, blend additively
-        color = mix(color, color + logo.rgb * 0.6, logo.a);
-    }
-
-
-
-
-
-
-
+    vec2 uv = fragCoord / iResolution.xy;
+    vec4 myTex = texture2D(iChannel0, uv);
 
 
     fragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
