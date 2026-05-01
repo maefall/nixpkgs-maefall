@@ -90,11 +90,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
     color *= vignette;
 
-
-
-    vec2 uv = fragCoord / iResolution.xy;
-    vec4 myTex = texture2D(iChannel0, uv);
-
-
     fragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }
