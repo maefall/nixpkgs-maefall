@@ -44,7 +44,7 @@ in
     shader = {
       path = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = ./shaders;
+        default = ./shaders/gravekkeepers-solwa.glsl;
         description = "Path to a GLSL shader file";
       };
       speed = lib.mkOption {
