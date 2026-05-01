@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.neowall;
@@ -6,26 +11,33 @@ let
   neowallCli = lib.getExe neowallPackage;
 
   renderedConfig =
-    if cfg.mode == "shader" then ''
-      default {
-        shader shader.glsl
-        shader_speed ${toString cfg.shader.speed}
-      }
-    ''
-    else if cfg.mode == "slideshow" then ''
-      default {
-        path ${toString cfg.slideshow.path}/
-        duration ${toString cfg.slideshow.duration}
-        transition ${cfg.slideshow.transition}
-      }
-    ''
-    else throw "Unsupported wallpaper mode: ${cfg.mode}";
-in {
+    if cfg.mode == "shader" then
+      ''
+        default {
+          shader shader.glsl
+          shader_speed ${toString cfg.shader.speed}
+        }
+      ''
+    else if cfg.mode == "slideshow" then
+      ''
+        default {
+          path ${toString cfg.slideshow.path}/
+          duration ${toString cfg.slideshow.duration}
+          transition ${cfg.slideshow.transition}
+        }
+      ''
+    else
+      throw "Unsupported wallpaper mode: ${cfg.mode}";
+in
+{
   options.programs.neowall = {
     enable = lib.mkEnableOption "Neowall";
 
     mode = lib.mkOption {
-      type = lib.types.enum [ "shader" "slideshow" ];
+      type = lib.types.enum [
+        "shader"
+        "slideshow"
+      ];
       default = "shader";
     };
 
@@ -51,7 +63,12 @@ in {
         default = 300;
       };
       transition = lib.mkOption {
-        type = lib.types.enum [ "none" "fade" "glitch" "wipe" ];
+        type = lib.types.enum [
+          "none"
+          "fade"
+          "glitch"
+          "wipe"
+        ];
         default = "none";
       };
     };
@@ -78,19 +95,23 @@ in {
     })
 
     (lib.mkIf (cfg.enable && cfg.mode == "slideshow") {
-      assertions = [{
-        assertion = cfg.slideshow.dir != null;
-        message = "programs.neowall.slideshow.dir must be set when mode = \"slideshow\"";
-      }];
+      assertions = [
+        {
+          assertion = cfg.slideshow.dir != null;
+          message = "programs.neowall.slideshow.dir must be set when mode = \"slideshow\"";
+        }
+      ];
     })
 
     (lib.mkIf (cfg.enable && cfg.mode == "shader") {
-      assertions = [{
-        assertion = cfg.shader.path != null;
-        message = "programs.neowall.shader.path must be set when mode = \"shader\"";
-      }];
+      assertions = [
+        {
+          assertion = cfg.shader.path != null;
+          message = "programs.neowall.shader.path must be set when mode = \"shader\"";
+        }
+      ];
       xdg.configFile."neowall/shaders/shader.glsl" = {
-        source = cfg.shader.path;
+        text = builtins.readFile cfg.shader.path;
         force = true;
       };
     })
