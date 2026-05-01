@@ -5,6 +5,8 @@
   ...
 }:
 
+
+
 let
   cfg = config.programs.neowall;
   neowallPackage = pkgs.callPackage ../../../packages/neowall/default.nix { };
@@ -16,6 +18,7 @@ let
         default {
           shader shader.glsl
           shader_speed ${toString cfg.shader.speed}
+          channel0 ~/Downloads/gravekeepers-logo-wallpaper-size-black.png
         }
       ''
     else if cfg.mode == "slideshow" then
