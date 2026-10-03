@@ -38,6 +38,7 @@ in
         "shader"
         "slideshow"
       ];
+
       default = "shader";
     };
 
@@ -47,6 +48,7 @@ in
         default = ./shaders/gravekeepers-solwa.glsl;
         description = "Path to a GLSL shader file";
       };
+
       speed = lib.mkOption {
         type = lib.types.float;
         default = 1.0;
@@ -58,10 +60,12 @@ in
         type = lib.types.nullOr lib.types.path;
         default = null;
       };
+
       duration = lib.mkOption {
         type = lib.types.int;
         default = 300;
       };
+
       transition = lib.mkOption {
         type = lib.types.enum [
           "none"
@@ -69,6 +73,7 @@ in
           "glitch"
           "wipe"
         ];
+
         default = "none";
       };
     };
@@ -85,11 +90,13 @@ in
           After = [ "graphical-session.target" ];
           PartOf = [ "graphical-session.target" ];
         };
+
         Service = {
           Type = "simple";
           ExecStart = "${neowallCli} --foreground --verbose";
           Restart = "on-failure";
         };
+
         Install.WantedBy = [ "graphical-session.target" ];
       };
     })
@@ -110,6 +117,7 @@ in
           message = "programs.neowall.shader.file must be set when mode = \"shader\"";
         }
       ];
+
       xdg.configFile."neowall/shaders/shader.glsl" = {
         text = builtins.readFile cfg.shader.file;
         force = true;
