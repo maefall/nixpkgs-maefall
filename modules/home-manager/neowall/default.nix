@@ -5,8 +5,6 @@
   ...
 }:
 
-
-
 let
   cfg = config.programs.neowall;
   neowallPackage = pkgs.callPackage ../../../packages/neowall/default.nix { };
@@ -23,7 +21,7 @@ let
     else if cfg.mode == "slideshow" then
       ''
         default {
-          path ${toString cfg.slideshow.path}/
+          path ${toString cfg.slideshow.imagesDirectory}/
           duration ${toString cfg.slideshow.duration}
           transition ${cfg.slideshow.transition}
         }
@@ -44,7 +42,7 @@ in
     };
 
     shader = {
-      path = lib.mkOption {
+      file = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = ./shaders/gravekeepers-solwa.glsl;
         description = "Path to a GLSL shader file";
@@ -56,7 +54,7 @@ in
     };
 
     slideshow = {
-      dir = lib.mkOption {
+      imagesDirectory = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
       };
@@ -99,8 +97,8 @@ in
     (lib.mkIf (cfg.enable && cfg.mode == "slideshow") {
       assertions = [
         {
-          assertion = cfg.slideshow.dir != null;
-          message = "programs.neowall.slideshow.dir must be set when mode = \"slideshow\"";
+          assertion = cfg.slideshow.imagesDirectory != null;
+          message = "programs.neowall.slideshow.imagesDirectory must be set when mode = \"slideshow\"";
         }
       ];
     })
@@ -108,12 +106,12 @@ in
     (lib.mkIf (cfg.enable && cfg.mode == "shader") {
       assertions = [
         {
-          assertion = cfg.shader.path != null;
-          message = "programs.neowall.shader.path must be set when mode = \"shader\"";
+          assertion = cfg.shader.file != null;
+          message = "programs.neowall.shader.file must be set when mode = \"shader\"";
         }
       ];
       xdg.configFile."neowall/shaders/shader.glsl" = {
-        text = builtins.readFile cfg.shader.path;
+        text = builtins.readFile cfg.shader.file;
         force = true;
       };
     })
