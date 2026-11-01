@@ -30,7 +30,7 @@ let
     pnpm = pnpm;
     fetcherVersion = 1;
     inherit pname src;
-    hash = "sha256-cQBJLoYlQf6Q/eL8WI08uzl/F16RK1Ncyo7LsuduWk4=";
+    hash = "sha256-oSNPb7mtyYmoOF0HT7hQRAKPgNiddE/sjXsAiSzPOkM=";
   };
 
 in rustPlatform.buildRustPackage {
