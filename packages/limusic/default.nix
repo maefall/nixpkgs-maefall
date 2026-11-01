@@ -45,7 +45,7 @@ let
     pnpm = pnpm;
     fetcherVersion = 1;
     inherit pname src;
-    hash = "";
+    hash = "sha256-wsuv9OM6KrRC6HxuIOJ/d+1PnKfY7zSCwhnUMXSAgFs=";
   };
 in
 rustPlatform.buildRustPackage {
