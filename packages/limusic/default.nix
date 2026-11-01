@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchzip, fetchurl
-, rustPlatform, pkg-config
-, pnpm, nodejs
-, gtk3, webkitgtk_4_1, librsvg, libayatana-appindicator
-, dbus, mpv, openssl, glib-networking, gsettings-desktop-schemas
-, autoPatchelfHook, makeWrapper, ...
+{
+  lib,
+  fetchzip,
+  fetchurl,
+  rustPlatform,
+  pkg-config,
+  pnpm,
+  nodejs,
+  gtk3,
+  webkitgtk_4_1,
+  librsvg,
+  libayatana-appindicator,
+  dbus,
+  mpv,
+  openssl,
+  glib-networking,
+  gsettings-desktop-schemas,
+  autoPatchelfHook,
+  makeWrapper,
+  ...
 }:
+
 let
   pname = "limusic";
   version = "1.3.0-rc.8";
@@ -32,15 +47,15 @@ let
     inherit pname src;
     hash = "sha256-oSNPb7mtyYmoOF0HT7hQRAKPgNiddE/sjXsAiSzPOkM=";
   };
-
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   inherit pname version src;
 
   cargoHash = "sha256-kks81RoV1qXyT+CI4yMHGxx2E+gVoYyriuflsyhKm1s=";
   doCheck = false;
 
   pnpmRoot = "ui";
-  pnpmDeps = pnpmDeps;
+  inherit pnpmDeps;
 
   preBuild = ''
     export LINDERA_IPADIC_URL="${ipadicSrc}"
@@ -68,14 +83,20 @@ in rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
-    gtk3 webkitgtk_4_1 librsvg
-    libayatana-appindicator dbus
-    mpv openssl
-    glib-networking gsettings-desktop-schemas
+    gtk3
+    webkitgtk_4_1
+    librsvg
+    libayatana-appindicator
+    dbus
+    mpv
+    openssl
+    glib-networking
+    gsettings-desktop-schemas
   ];
 
   postInstall = ''
     mv "$out/bin/limusic-app" "$out/bin/limusic"
+
     wrapProgram "$out/bin/limusic" \
       --set GIO_MODULE_DIR "${glib-networking}/lib/gio/modules" \
       --set GIO_EXTRA_MODULES "${glib-networking}/lib/gio/modules" \
